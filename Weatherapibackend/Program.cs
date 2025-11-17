@@ -115,7 +115,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins(
                 "http://localhost:7009",
-                "https://localhost:7009"   // ✅ add HTTPS version too
+                "https://localhost:7009",
+                "https://green-sky-076ce9f1e.3.azurestaticapps.net"// ✅ add HTTPS version too
             )
             .AllowAnyHeader()
             .AllowAnyMethod()
