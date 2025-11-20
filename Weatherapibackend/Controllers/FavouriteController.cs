@@ -78,6 +78,16 @@ namespace Weatherapibackend.Controllers
                 if (string.IsNullOrWhiteSpace(request.City))
                     return BadRequest(new { Error = "City name cannot be empty." });
 
+                // --- Add City Validation Here ---
+                var apiKey = "898c51e8b3072bda4577b3aff97c30e7";
+                var validationUrl = $"https://api.openweathermap.org/data/2.5/weather?q={request.City}&appid={apiKey}";
+                using var httpClient = new HttpClient();
+                var validationResponse = await httpClient.GetAsync(validationUrl);
+                if (!validationResponse.IsSuccessStatusCode)
+                    return BadRequest(new { Error = "City not found. Please enter a valid city name." });
+
+                // --------------------------------
+
                 await _repository.AddFavorite(userId, request.City, request.Notes);
                 return Ok(new { Message = $"'{request.City}' added to favorites." });
             }
@@ -87,6 +97,7 @@ namespace Weatherapibackend.Controllers
                 return StatusCode(500, new { Error = ex.Message });
             }
         }
+
 
         // ✅ DELETE /api/favorites/remove
         [HttpDelete("remove")]
